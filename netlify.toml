@@ -1,0 +1,17 @@
+[build]
+  base    = "."
+  command = "pnpm --filter @workspace/school-bus... run build"
+  publish = "artifacts/school-bus/dist/public"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "9"
+  NPM_FLAGS    = "--version"
+  NODE_ENV     = "production"
+  BASE_PATH    = "/"
+
+# SPA fallback so client-side routes like /login, /admin/* work on refresh
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
