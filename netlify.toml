@@ -5,10 +5,13 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  PNPM_VERSION = "9"
-  NPM_FLAGS    = "--version"
-  NODE_ENV     = "production"
-  BASE_PATH    = "/"
+  PNPM_VERSION = "10"
+  # Allow Netlify to install devDependencies (vite, tsc, etc.) — the build needs them.
+  NPM_CONFIG_PRODUCTION = "false"
+  # Tolerate the lockfile not exactly matching when overrides shift between pnpm versions.
+  PNPM_FLAGS = "--no-frozen-lockfile"
+  # Vite needs this; defaults to "/" for a root-hosted site.
+  BASE_PATH = "/"
 
 # SPA fallback so client-side routes like /login, /admin/* work on refresh
 [[redirects]]
