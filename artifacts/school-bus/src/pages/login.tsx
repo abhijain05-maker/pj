@@ -33,7 +33,7 @@ export default function Login() {
               <Bus className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight">RouteMate Admin</h1>
+              <h1 className="text-xl font-bold tracking-tight">Route Mate Admin</h1>
               <p className="text-primary-foreground/80 text-xs font-medium">Sign in to manage operations</p>
             </div>
           </div>

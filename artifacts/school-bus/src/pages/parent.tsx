@@ -148,7 +148,7 @@ export default function Parent() {
                             <div key={i} className="flex justify-between items-center text-sm bg-white p-3 rounded-lg border border-border/50 shadow-sm">
                               <div>
                                 <span className="font-mono font-bold text-foreground">{fee.month}</span>
-                                <span className="ml-2 text-muted-foreground">${fee.amount}</span>
+                                <span className="ml-2 text-muted-foreground">₹{fee.amount}</span>
                               </div>
                               {fee.status === "PAID" ? (
                                 <span className="text-green-600 font-bold flex items-center gap-1 text-xs">

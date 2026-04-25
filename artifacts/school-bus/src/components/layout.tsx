@@ -32,7 +32,7 @@ export function Layout({ children }: LayoutProps) {
           <div className="bg-sidebar-primary text-sidebar-primary-foreground p-2 rounded-lg">
             <Bus className="w-6 h-6" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight">RouteMate</h1>
+          <h1 className="text-xl font-bold tracking-tight">Route Mate</h1>
         </div>
 
         <nav className="flex-1 px-4 pb-4 space-y-1 overflow-y-auto flex md:flex-col gap-2 md:gap-1">

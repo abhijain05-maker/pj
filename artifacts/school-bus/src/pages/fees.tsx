@@ -114,7 +114,7 @@ export default function Fees() {
                               <Phone className="w-3 h-3" /> {fee.parentPhone}
                             </div>
                           </TableCell>
-                          <TableCell className="font-bold">${fee.amount}</TableCell>
+                          <TableCell className="font-bold">₹{fee.amount}</TableCell>
                           <TableCell className="text-right">
                             <Button 
                               size="sm" 
@@ -179,7 +179,7 @@ export default function Fees() {
                             <div className="font-medium">{student.name}</div>
                             <div className="text-xs text-muted-foreground">{student.className}</div>
                           </TableCell>
-                          <TableCell className="font-medium">${student.monthlyFee}</TableCell>
+                          <TableCell className="font-medium">₹{student.monthlyFee}</TableCell>
                           <TableCell>
                             {isPaid ? (
                               <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">

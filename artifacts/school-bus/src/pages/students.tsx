@@ -123,7 +123,7 @@ export default function Students() {
                     <FormItem><FormLabel>Parent Phone</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
                   )} />
                   <FormField control={form.control} name="monthlyFee" render={({ field }) => (
-                    <FormItem className="col-span-2"><FormLabel>Monthly Fee ($)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage/></FormItem>
+                    <FormItem className="col-span-2"><FormLabel>Monthly Fee (₹)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage/></FormItem>
                   )} />
                 </div>
                 <div className="flex justify-end pt-4">
@@ -160,7 +160,7 @@ export default function Students() {
                   <FormItem><FormLabel>Parent Phone</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
                 )} />
                 <FormField control={form.control} name="monthlyFee" render={({ field }) => (
-                  <FormItem className="col-span-2"><FormLabel>Monthly Fee ($)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage/></FormItem>
+                  <FormItem className="col-span-2"><FormLabel>Monthly Fee (₹)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage/></FormItem>
                 )} />
               </div>
               <div className="flex justify-end pt-4">
@@ -232,7 +232,7 @@ export default function Students() {
                         </div>
                       </TableCell>
                       <TableCell className="text-sm font-medium">
-                        ${student.monthlyFee}
+                        ₹{student.monthlyFee}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

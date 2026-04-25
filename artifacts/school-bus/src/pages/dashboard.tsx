@@ -32,8 +32,8 @@ export default function Dashboard() {
     { title: "On Board Today", value: summary?.onBoardToday, icon: CheckCircle2, color: "text-green-600", bg: "bg-green-100" },
     { title: "Absent Today", value: summary?.absentToday, icon: XCircle, color: "text-gray-600", bg: "bg-gray-200" },
     { title: "Unmarked", value: summary?.unmarkedToday, icon: Clock, color: "text-orange-500", bg: "bg-orange-100" },
-    { title: "Revenue Collected", value: summary?.revenueCollectedThisMonth ? `$${summary.revenueCollectedThisMonth}` : "$0", icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-100" },
-    { title: "Pending Fees", value: summary?.revenuePendingThisMonth ? `$${summary.revenuePendingThisMonth}` : "$0", icon: AlertCircle, color: "text-red-600", bg: "bg-red-100" },
+    { title: "Revenue Collected", value: summary?.revenueCollectedThisMonth ? `₹${summary.revenueCollectedThisMonth}` : "₹0", icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-100" },
+    { title: "Pending Fees", value: summary?.revenuePendingThisMonth ? `₹${summary.revenuePendingThisMonth}` : "₹0", icon: AlertCircle, color: "text-red-600", bg: "bg-red-100" },
   ];
 
   return (
