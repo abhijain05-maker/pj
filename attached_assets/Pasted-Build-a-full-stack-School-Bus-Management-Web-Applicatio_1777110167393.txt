@@ -1,0 +1,165 @@
+Build a full-stack School Bus Management Web Application using the following stack:
+
+Frontend:
+
+* React (with hooks)
+* Use modern UI (Material UI or Tailwind)
+* Responsive design (mobile-friendly)
+
+Backend:
+
+* Node.js with Express
+* PostgreSQL database (use pg or an ORM like Prisma/Sequelize)
+
+---
+
+### Core Features:
+
+1. Admin Panel (No authentication required for now, but structure code to support it later)
+
+* Add/Edit/Delete Students
+  Fields:
+
+  * Name
+  * Class
+  * Bus Stop
+  * Parent Name
+  * Parent Phone
+  * Monthly Fee
+
+* Attendance Management (Date-wise)
+
+  * Mark student as:
+
+    * ON_BOARD
+    * OFF_BOARD
+    * ABSENT
+  * Store attendance with date and timestamp
+  * Ability to filter attendance by date
+
+* Fee Tracking
+
+  * Mark fee as PAID/UNPAID for each student per month
+  * Store payment date
+  * Show pending fees
+
+---
+
+2. Public Parent View (No login)
+
+* Search student by:
+
+  * Name OR Parent Phone
+* Show:
+
+  * Today’s bus status (ON_BOARD / OFF_BOARD / ABSENT)
+  * Attendance history (date-wise)
+  * Fee status (paid or pending month-wise)
+
+---
+
+### Database Design:
+
+Create PostgreSQL tables:
+
+Students:
+
+* id (PK)
+* name
+* class
+* bus_stop
+* parent_name
+* parent_phone
+* monthly_fee
+* created_at
+
+Attendance:
+
+* id (PK)
+* student_id (FK)
+* status (ON_BOARD, OFF_BOARD, ABSENT)
+* date
+* timestamp
+
+Fees:
+
+* id (PK)
+* student_id (FK)
+* month (YYYY-MM)
+* status (PAID, UNPAID)
+* paid_on
+
+---
+
+### Backend APIs:
+
+Students:
+
+* POST /students
+* GET /students
+* PUT /students/:id
+* DELETE /students/:id
+
+Attendance:
+
+* POST /attendance
+* GET /attendance?date=YYYY-MM-DD
+
+Fees:
+
+* POST /fees
+* GET /fees
+* GET /fees/pending
+
+Public:
+
+* GET /public/student?query=NAME_OR_PHONE
+
+---
+
+### Additional Requirements:
+
+* Use clean folder structure (controllers, routes, models, services)
+* Use environment variables for DB connection
+* Add basic validation
+* Use async/await
+* Include error handling middleware
+* Seed some dummy data
+
+---
+
+### UI Requirements:
+
+Admin Dashboard:
+
+* Student list table
+* Add student form
+* Attendance marking screen (date picker + toggle buttons)
+* Fee status table
+
+Parent View:
+
+* Search bar
+* Student card showing:
+
+  * Name
+  * Bus status (today)
+  * Attendance history (table)
+  * Fee status
+
+---
+
+### Bonus (if possible):
+
+* Highlight ON_BOARD in green, OFF_BOARD in red, ABSENT in gray
+* Simple charts (attendance %)
+* API loading states
+
+---
+
+### Output Required:
+
+* Full working code (frontend + backend)
+* SQL schema or migration files
+* Instructions to run locally
+* Sample .env file

@@ -3,20 +3,29 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: School Bus Management API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: students
+    description: Student records
+  - name: attendance
+    description: Daily attendance tracking
+  - name: fees
+    description: Monthly fee tracking
+  - name: dashboard
+    description: Dashboard summaries
+  - name: public
+    description: Public parent-facing endpoints
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,7 +33,282 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /students:
+    get:
+      operationId: listStudents
+      tags: [students]
+      summary: List all students
+      parameters:
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
+          description: Filter by name, parent name, or stop
+      responses:
+        "200":
+          description: Student list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+    post:
+      operationId: createStudent
+      tags: [students]
+      summary: Create a student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStudentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /students/{id}:
+    get:
+      operationId: getStudent
+      tags: [students]
+      summary: Get one student
+      parameters:
+        - $ref: "#/components/parameters/IdPath"
+      responses:
+        "200":
+          description: Student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      operationId: updateStudent
+      tags: [students]
+      summary: Update a student
+      parameters:
+        - $ref: "#/components/parameters/IdPath"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStudentInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteStudent
+      tags: [students]
+      summary: Delete a student
+      parameters:
+        - $ref: "#/components/parameters/IdPath"
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /attendance:
+    get:
+      operationId: listAttendance
+      tags: [attendance]
+      summary: List attendance records
+      parameters:
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+          description: Date in YYYY-MM-DD format
+        - in: query
+          name: studentId
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Attendance list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttendanceRecord"
+    post:
+      operationId: upsertAttendance
+      tags: [attendance]
+      summary: Mark attendance for a student on a given date
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertAttendanceInput"
+      responses:
+        "200":
+          description: Upserted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttendanceRecord"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /fees:
+    get:
+      operationId: listFees
+      tags: [fees]
+      summary: List fee records
+      parameters:
+        - in: query
+          name: month
+          required: false
+          schema:
+            type: string
+          description: Month in YYYY-MM
+        - in: query
+          name: studentId
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Fee list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FeeRecord"
+    post:
+      operationId: upsertFee
+      tags: [fees]
+      summary: Mark fee paid/unpaid for a student in a month
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertFeeInput"
+      responses:
+        "200":
+          description: Upserted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeeRecord"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /fees/pending:
+    get:
+      operationId: listPendingFees
+      tags: [fees]
+      summary: List students with unpaid fees for the current month
+      responses:
+        "200":
+          description: Pending fees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PendingFee"
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Aggregate counts and revenue summary
+      responses:
+        "200":
+          description: Summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/attendance-trend:
+    get:
+      operationId: getAttendanceTrend
+      tags: [dashboard]
+      summary: Daily attendance counts for the last N days
+      parameters:
+        - in: query
+          name: days
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Trend
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttendanceTrendPoint"
+
+  /public/student:
+    get:
+      operationId: publicSearchStudent
+      tags: [public]
+      summary: Public search by student name or parent phone
+      parameters:
+        - in: query
+          name: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Matched students with status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PublicStudentCard"
+
 components:
+  parameters:
+    IdPath:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
   schemas:
     HealthStatus:
       type: object
@@ -34,3 +318,312 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    AttendanceStatus:
+      type: string
+      enum: [ON_BOARD, OFF_BOARD, ABSENT]
+
+    FeeStatus:
+      type: string
+      enum: [PAID, UNPAID]
+
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        className:
+          type: string
+        busStop:
+          type: string
+        parentName:
+          type: string
+        parentPhone:
+          type: string
+        monthlyFee:
+          type: number
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - className
+        - busStop
+        - parentName
+        - parentPhone
+        - monthlyFee
+        - createdAt
+
+    CreateStudentInput:
+      type: object
+      properties:
+        name:
+          type: string
+        className:
+          type: string
+        busStop:
+          type: string
+        parentName:
+          type: string
+        parentPhone:
+          type: string
+        monthlyFee:
+          type: number
+      required:
+        - name
+        - className
+        - busStop
+        - parentName
+        - parentPhone
+        - monthlyFee
+
+    UpdateStudentInput:
+      type: object
+      properties:
+        name:
+          type: string
+        className:
+          type: string
+        busStop:
+          type: string
+        parentName:
+          type: string
+        parentPhone:
+          type: string
+        monthlyFee:
+          type: number
+      required:
+        - name
+        - className
+        - busStop
+        - parentName
+        - parentPhone
+        - monthlyFee
+
+    AttendanceRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        studentName:
+          type: string
+        status:
+          $ref: "#/components/schemas/AttendanceStatus"
+        date:
+          type: string
+        timestamp:
+          type: string
+      required:
+        - id
+        - studentId
+        - studentName
+        - status
+        - date
+        - timestamp
+
+    UpsertAttendanceInput:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        date:
+          type: string
+        status:
+          $ref: "#/components/schemas/AttendanceStatus"
+      required:
+        - studentId
+        - date
+        - status
+
+    FeeRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        studentName:
+          type: string
+        month:
+          type: string
+        status:
+          $ref: "#/components/schemas/FeeStatus"
+        paidOn:
+          type: ["string", "null"]
+        amount:
+          type: number
+      required:
+        - id
+        - studentId
+        - studentName
+        - month
+        - status
+        - amount
+
+    UpsertFeeInput:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        month:
+          type: string
+        status:
+          $ref: "#/components/schemas/FeeStatus"
+      required:
+        - studentId
+        - month
+        - status
+
+    PendingFee:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        studentName:
+          type: string
+        className:
+          type: string
+        parentName:
+          type: string
+        parentPhone:
+          type: string
+        month:
+          type: string
+        amount:
+          type: number
+      required:
+        - studentId
+        - studentName
+        - className
+        - parentName
+        - parentPhone
+        - month
+        - amount
+
+    DashboardSummary:
+      type: object
+      properties:
+        totalStudents:
+          type: integer
+        onBoardToday:
+          type: integer
+        offBoardToday:
+          type: integer
+        absentToday:
+          type: integer
+        unmarkedToday:
+          type: integer
+        paidThisMonth:
+          type: integer
+        unpaidThisMonth:
+          type: integer
+        revenueCollectedThisMonth:
+          type: number
+        revenuePendingThisMonth:
+          type: number
+      required:
+        - totalStudents
+        - onBoardToday
+        - offBoardToday
+        - absentToday
+        - unmarkedToday
+        - paidThisMonth
+        - unpaidThisMonth
+        - revenueCollectedThisMonth
+        - revenuePendingThisMonth
+
+    AttendanceTrendPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        onBoard:
+          type: integer
+        offBoard:
+          type: integer
+        absent:
+          type: integer
+      required:
+        - date
+        - onBoard
+        - offBoard
+        - absent
+
+    PublicStudentCard:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        className:
+          type: string
+        busStop:
+          type: string
+        parentName:
+          type: string
+        parentPhone:
+          type: string
+        monthlyFee:
+          type: number
+        todayStatus:
+          oneOf:
+            - $ref: "#/components/schemas/AttendanceStatus"
+            - type: "null"
+        attendanceHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttendanceHistoryEntry"
+        feeHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeeHistoryEntry"
+      required:
+        - id
+        - name
+        - className
+        - busStop
+        - parentName
+        - parentPhone
+        - monthlyFee
+        - todayStatus
+        - attendanceHistory
+        - feeHistory
+
+    AttendanceHistoryEntry:
+      type: object
+      properties:
+        date:
+          type: string
+        status:
+          $ref: "#/components/schemas/AttendanceStatus"
+      required:
+        - date
+        - status
+
+    FeeHistoryEntry:
+      type: object
+      properties:
+        month:
+          type: string
+        status:
+          $ref: "#/components/schemas/FeeStatus"
+        paidOn:
+          type: ["string", "null"]
+        amount:
+          type: number
+      required:
+        - month
+        - status
+        - amount
