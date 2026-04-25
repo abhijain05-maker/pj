@@ -18,6 +18,13 @@ Full-stack School Bus Management web app. Admins manage students, mark daily bus
 - `artifacts/api-server` — REST API (`/api`)
 - `artifacts/mockup-sandbox` — design canvas
 
+## Routing & Auth
+
+- `/` — public Parent Portal (search by student name or parent phone)
+- `/login` — admin login (hardcoded credentials: `admin` / `GyanFactory`)
+- `/admin`, `/admin/students`, `/admin/attendance`, `/admin/fees` — admin pages, gated by `useAuth` (sessionStorage). Unauthenticated visits redirect to `/login`.
+- Admin layout sidebar includes a "Sign out" button that clears the session and returns to `/`.
+
 ## Domain model
 
 - `students` — name, class, bus stop, parent name/phone, monthly fee

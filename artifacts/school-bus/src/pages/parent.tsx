@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { usePublicSearchStudent } from "@workspace/api-client-react";
-import { Search, Bus, MapPin, Phone, CalendarCheck, CreditCard, ChevronRight } from "lucide-react";
+import { Link } from "wouter";
+import { usePublicSearchStudent, getPublicSearchStudentQueryKey } from "@workspace/api-client-react";
+import { Search, Bus, MapPin, Phone, CalendarCheck, CreditCard, ChevronRight, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { format, parseISO } from "date-fns";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Parent() {
   const [query, setQuery] = useState("");
   const [searchTrigger, setSearchTrigger] = useState("");
+  const { isAuthenticated } = useAuth();
 
   const { data: results, isLoading } = usePublicSearchStudent(
     { query: searchTrigger },
-    { query: { enabled: searchTrigger.length > 2, retry: false } }
+    {
+      query: {
+        queryKey: getPublicSearchStudentQueryKey({ query: searchTrigger }),
+        enabled: searchTrigger.length > 2,
+        retry: false,
+      },
+    }
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -30,15 +39,23 @@ export default function Parent() {
 
   return (
     <div className="min-h-[100dvh] bg-[#fdfbf7] flex flex-col">
-      <div className="bg-primary text-primary-foreground py-6 px-4 md:px-8 flex items-center justify-center shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
-            <Bus className="w-8 h-8" />
+      <div className="bg-primary text-primary-foreground py-6 px-4 md:px-8 shadow-sm">
+        <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+              <Bus className="w-8 h-8" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Parent Portal</h1>
+              <p className="text-primary-foreground/80 text-sm font-medium">Live school bus status tracking</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">Parent Portal</h1>
-            <p className="text-primary-foreground/80 text-sm font-medium">Live school bus status tracking</p>
-          </div>
+          <Link href={isAuthenticated ? "/admin" : "/login"}>
+            <button className="flex items-center gap-2 bg-white/15 hover:bg-white/25 transition-colors px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/20">
+              <Lock className="w-4 h-4" />
+              <span>{isAuthenticated ? "Admin Panel" : "Admin Login"}</span>
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -170,5 +187,5 @@ export default function Parent() {
 }
 
 function Check({ className }: { className?: string }) {
-  return <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinelinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>;
+  return <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>;
 }

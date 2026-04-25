@@ -1,21 +1,28 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Bus, Users, CalendarCheck, CreditCard, Search } from "lucide-react";
+import { Bus, Users, CalendarCheck, CreditCard, Search, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
+  const { logout } = useAuth();
 
   const navItems = [
-    { href: "/", label: "Dashboard", icon: Bus },
-    { href: "/students", label: "Students", icon: Users },
-    { href: "/attendance", label: "Attendance", icon: CalendarCheck },
-    { href: "/fees", label: "Fees", icon: CreditCard },
+    { href: "/admin", label: "Dashboard", icon: Bus },
+    { href: "/admin/students", label: "Students", icon: Users },
+    { href: "/admin/attendance", label: "Attendance", icon: CalendarCheck },
+    { href: "/admin/fees", label: "Fees", icon: CreditCard },
   ];
+
+  const handleLogout = () => {
+    logout();
+    setLocation("/");
+  };
 
   return (
     <div className="min-h-[100dvh] flex flex-col md:flex-row bg-background">
@@ -50,8 +57,8 @@ export function Layout({ children }: LayoutProps) {
           })}
         </nav>
 
-        <div className="p-4 mt-auto">
-          <Link href="/parent">
+        <div className="p-4 mt-auto space-y-2">
+          <Link href="/">
             <div className="flex items-center gap-3 px-3 py-3 rounded-md bg-secondary/10 text-secondary-foreground hover:bg-secondary/20 transition-colors cursor-pointer border border-secondary/20 shadow-sm">
               <Search className="w-5 h-5" />
               <div className="hidden md:block text-sm">
@@ -60,6 +67,13 @@ export function Layout({ children }: LayoutProps) {
               </div>
             </div>
           </Link>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors"
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            <span className="hidden md:block text-sm font-medium">Sign out</span>
+          </button>
         </div>
       </aside>
 

@@ -128,7 +128,7 @@ export default function Dashboard() {
               <Clock className="w-12 h-12 opacity-20" />
               <p>Mark attendance quickly from the attendance page to keep the dashboard updated.</p>
               <Button asChild className="w-full">
-                <a href="/attendance">Go to Attendance</a>
+                <a href="/admin/attendance">Go to Attendance</a>
               </Button>
             </div>
           </CardContent>
